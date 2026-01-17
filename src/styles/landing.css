@@ -1,0 +1,53 @@
+.landing-container {
+  font-family: Arial, sans-serif;
+}
+
+.hero {
+  height: 80vh;
+  background: linear-gradient(to right, #2563eb, #1e40af);
+  color: white;
+  text-align: center;
+  padding-top: 120px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+}
+
+.hero p {
+  margin: 20px 0;
+  font-size: 1.2rem;
+}
+
+.hero-buttons .btn {
+  padding: 12px 24px;
+  margin: 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn.primary {
+  background: white;
+  color: #1e40af;
+}
+
+.btn.secondary {
+  border: 2px solid white;
+  color: white;
+}
+
+.features {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 30px;
+}
+
+.feature-card {
+  width: 250px;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  text-align: center;
+}

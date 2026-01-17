@@ -1,0 +1,33 @@
+.header {
+  background: #0f172a;
+  color: white;
+  padding: 14px 40px;
+  border-bottom: 3px solid #2563eb;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.college-logo {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  margin-right: 15px;
+}
+
+.college-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.college-name {
+  font-size: 20px;
+  margin: 0;
+}
+
+.college-subtitle {
+  font-size: 13px;
+  color: #c7d2fe;
+}

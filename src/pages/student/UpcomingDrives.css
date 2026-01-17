@@ -1,0 +1,76 @@
+.drives-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.page-title {
+  margin-bottom: 20px;
+  color: #0f172a;
+}
+
+.drives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.drive-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.drive-left p {
+  margin: 4px 0;
+}
+
+.company-name {
+  margin: 0;
+  color: #1e3a8a;
+}
+
+.role {
+  font-weight: 500;
+}
+
+.ctc {
+  color: #065f46;
+}
+
+.eligibility {
+  font-size: 14px;
+}
+
+.date {
+  font-size: 14px;
+  color: #475569;
+}
+
+.drive-right {
+  display: flex;
+  align-items: center;
+}
+
+.apply-btn {
+  background-color: #2563eb;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.apply-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.status.applied {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+}
