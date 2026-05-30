@@ -16,16 +16,18 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import UpcomingDrives from "./pages/student/UpcomingDrives";
 import MyApplications from "./pages/student/MyApplications";
+import SignupPage from "./pages/SignupPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   return (
-    
     <BrowserRouter>
       <Routes>
-        
         {/* PUBLIC ROUTES */}
         <Route element={<PublicLayout />}>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           {/* <Route path="/register" element={<Register />} /> */}
         </Route>
 
