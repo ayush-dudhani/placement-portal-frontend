@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 const StudentLayout = () => {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <StudentNavbar />
       <main style={{ padding: "20px" }}>
         <Outlet />

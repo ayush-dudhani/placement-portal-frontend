@@ -1,43 +1,82 @@
-import "../styles/footer.css";
+import { Separator } from "@/components/ui/separator";
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer className="footer">
-      <div className="footer-container">
+    <footer className="border-t bg-background mt-12">
+      <div className="max-w-7xl mx-auto px-6 py-10">
 
-        {/* Sitemap / Links */}
-        <div className="footer-section">
-          <h4>Quick Links</h4>
-          <button>Student Dashboard</button>
-          <button>Company Drives</button>
-          <button>Placement Statistics</button>
-          <button>Contact Placement Cell</button>
+        <div className="grid gap-8 md:grid-cols-3">
+
+          {/* Quick Links */}
+          <div className="space-y-3">
+            <h4 className="font-semibold">
+              Quick Links
+            </h4>
+
+            <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <button className="text-left hover:text-foreground transition-colors">
+                Student Dashboard
+              </button>
+
+              <button className="text-left hover:text-foreground transition-colors">
+                Company Drives
+              </button>
+
+              <button className="text-left hover:text-foreground transition-colors">
+                Placement Statistics
+              </button>
+
+              <button className="text-left hover:text-foreground transition-colors">
+                Contact Placement Cell
+              </button>
+            </div>
+          </div>
+
+          {/* Support */}
+          <div className="space-y-3">
+            <h4 className="font-semibold">
+              Support
+            </h4>
+
+            <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <button className="text-left hover:text-foreground transition-colors">
+                Help
+              </button>
+
+              <button className="text-left hover:text-foreground transition-colors">
+                Guidelines
+              </button>
+
+              <button className="text-left hover:text-foreground transition-colors">
+                FAQs
+              </button>
+            </div>
+          </div>
+
+          {/* Address */}
+          <div className="space-y-3">
+            <h4 className="font-semibold">
+              College Address
+            </h4>
+
+            <p className="text-sm text-muted-foreground leading-6">
+              ABC Institute of Technology
+              <br />
+              Pune, Maharashtra – 411001
+              <br />
+              India
+            </p>
+          </div>
+
         </div>
 
-        {/* Support */}
-        <div className="footer-section">
-          <h4>Support</h4>
-          <button>Help</button>
-          <button>Guidelines</button>
-          <button>FAQs</button>
+        <Separator className="my-6" />
+
+        <div className="text-center text-sm text-muted-foreground">
+          © {new Date().getFullYear()} ABC Institute of Technology | Placement Portal
         </div>
 
-        {/* College Address */}
-        <div className="footer-section">
-          <h4>College Address</h4>
-          <p>
-            ABC Institute of Technology<br />
-            Pune, Maharashtra – 411001<br />
-            India
-          </p>
-        </div>
-      </div>
-
-      <div className="footer-bottom">
-        © {new Date().getFullYear()} ABC Institute of Technology | Placement Portal
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

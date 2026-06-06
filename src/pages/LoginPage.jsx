@@ -1,43 +1,73 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/login.css";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const LoginPage = () => {
-  const [collegeName, setCollegeName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError("");
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          collegeName,
-          username,
-          password,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:8080/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const data = await response.json().catch(() => null);
-        throw new Error(data?.message || "Login failed");
+
+        throw new Error(
+          data?.message || "Login failed"
+        );
       }
 
       const data = await response.json();
-      sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("username", data.username);
-      sessionStorage.setItem("collegeName", data.collegeName);
-      sessionStorage.setItem("role", data.role);
+
+      sessionStorage.setItem(
+        "token",
+        data.token
+      );
+
+      sessionStorage.setItem(
+        "role",
+        data.role
+      );
+
+      if (data.username) {
+        sessionStorage.setItem(
+          "username",
+          data.username
+        );
+      }
+
+      if (data.email) {
+        sessionStorage.setItem(
+          "email",
+          data.email
+        );
+      }
 
       if (data.role === "STUDENT") {
         navigate("/student/dashboard");
@@ -47,66 +77,124 @@ const LoginPage = () => {
         navigate("/login");
       }
     } catch (err) {
-      setError(err.message || "Login failed");
+      setError(
+        err.message || "Login failed"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-wrapper">
-      <div className="login-card">
-        <h2 className="login-title">College Placement Portal</h2>
-        <p className="login-subtitle">Login with your college credentials</p>
+    <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>College Name</label>
-            <input
-              type="text"
-              placeholder="PCCOE"
-              value={collegeName}
-              onChange={(e) => setCollegeName(e.target.value)}
-              required
+      <Card className="w-full max-w-md">
+
+        <CardHeader className="space-y-2 text-center">
+
+          <div className="flex justify-center">
+            <img
+              src="/college-logo.png"
+              alt="College Logo"
+              className="h-16 w-16 object-contain"
             />
           </div>
 
-          <div className="form-group">
-            <label>Username / Email</label>
-            <input
-              type="text"
-              placeholder="Enter username or college email"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
+          <CardTitle className="text-2xl">
+            Placement Portal
+          </CardTitle>
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+          <p className="text-sm text-muted-foreground">
+            Login using your college credentials
+          </p>
 
-          {error && <p className="error-text">{error}</p>}
+        </CardHeader>
 
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
+        <CardContent>
 
-          <div className="auth-links">
-            <Link to="/forgot-password">Forgot Password?</Link>
-            <Link to="/signup">Create Account</Link>
-          </div>
-        </form>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+          >
 
-        <p className="login-footer">Managed by your College Placement Cell</p>
-      </div>
+            <div className="space-y-2">
+              <Label>
+                Username / Email
+              </Label>
+
+              <Input
+                type="text"
+                placeholder="Enter username or email"
+                value={username}
+                onChange={(e) =>
+                  setUsername(
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>
+                Password
+              </Label>
+
+              <Input
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+
+            {error && (
+              <p className="text-sm text-destructive">
+                {error}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading}
+            >
+              {loading
+                ? "Logging in..."
+                : "Login"}
+            </Button>
+
+            <div className="flex justify-between text-sm">
+
+              <Link
+                to="/forgot-password"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Forgot Password?
+              </Link>
+
+              <Link
+                to="/signup"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Create Account
+              </Link>
+
+            </div>
+
+          </form>
+
+          <p className="text-center text-xs text-muted-foreground mt-6">
+            Managed by the College Placement Cell
+          </p>
+
+        </CardContent>
+
+      </Card>
+
     </div>
   );
 };
