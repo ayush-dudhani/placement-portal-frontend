@@ -1,4 +1,11 @@
-import "./MyApplications.css";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { Badge } from "@/components/ui/badge";
 
 const applications = [
   {
@@ -41,57 +48,161 @@ const getStatusLabel = (status) => {
   }
 };
 
-const MyApplications = () => {
-  return (
-    <div className="applications-container">
-      <div className="status-legend">
-        <h4>Application Status Guide</h4>
+const getStatusBadge = (status) => {
+  switch (status) {
+    case "APPLIED":
+      return (
+        <Badge variant="secondary">
+          Applied
+        </Badge>
+      );
 
-        <ul>
-          <li>
-            <span className="status-dot applied"></span>
-            <strong>Applied</strong> – Successfully applied
-          </li>
-          <li>
-            <span className="status-dot under_review"></span>
-            <strong>Under Review</strong> – Resume / eligibility being checked
-          </li>
-          <li>
-            <span className="status-dot shortlisted"></span>
-            <strong>Shortlisted</strong> – Selected for next round
-          </li>
-          <li>
-            <span className="status-dot rejected"></span>
-            <strong>Not Selected</strong> – Application Got Rejected
-          </li>
-          <li>
-            <span className="status-dot selected"></span>
-            <strong>Selected</strong> – Final offer
-          </li>
-        </ul>
-      </div>
+    case "UNDER_REVIEW":
+      return (
+        <Badge variant="outline">
+          Under Review
+        </Badge>
+      );
 
-      <h2 className="page-title">My Applications</h2>
+    case "SHORTLISTED":
+      return (
+        <Badge>
+          Shortlisted
+        </Badge>
+      );
 
-      <div className="applications-list">
-        {applications.map((app) => (
-          <div className="application-card" key={app.id}>
-            <div className="app-left">
-              <h3>{app.company}</h3>
-              <p className="role">{app.role}</p>
-              <p className="date">Applied On: {app.appliedOn}</p>
-            </div>
+    case "REJECTED":
+      return (
+        <Badge variant="destructive">
+          Not Selected
+        </Badge>
+      );
 
-            <div className="app-right">
-              <span className={`status-badge ${app.status.toLowerCase()}`}>
-                {getStatusLabel(app.status)}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    case "SELECTED":
+      return (
+        <Badge>
+          Selected
+        </Badge>
+      );
+
+    default:
+      return (
+        <Badge variant="secondary">
+          {status}
+        </Badge>
+      );
+  }
 };
 
-export default MyApplications;
+export default function MyApplications() {
+  return (
+    <div className="space-y-6">
+
+      <div>
+        <h1 className="text-3xl font-bold">
+          My Applications
+        </h1>
+
+        <p className="text-muted-foreground mt-1">
+          Track the status of all company applications.
+        </p>
+      </div>
+
+      {/* Status Guide */}
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            Application Status Guide
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <div className="grid gap-3 md:grid-cols-2">
+
+            <div className="flex items-center gap-3">
+              <Badge variant="secondary">
+                Applied
+              </Badge>
+
+              <span className="text-sm text-muted-foreground">
+                Successfully applied
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Badge variant="outline">
+                Under Review
+              </Badge>
+
+              <span className="text-sm text-muted-foreground">
+                Resume / eligibility being checked
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Badge>
+                Shortlisted
+              </Badge>
+
+              <span className="text-sm text-muted-foreground">
+                Selected for next round
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Badge variant="destructive">
+                Not Selected
+              </Badge>
+
+              <span className="text-sm text-muted-foreground">
+                Application rejected
+              </span>
+            </div>
+
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Applications */}
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            Applications
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-4">
+
+          {applications.map((app) => (
+            <div
+              key={app.id}
+              className="flex flex-col md:flex-row md:items-center md:justify-between border rounded-lg p-4 gap-3"
+            >
+
+              <div>
+                <h3 className="font-semibold">
+                  {app.company}
+                </h3>
+
+                <p className="text-sm text-muted-foreground">
+                  {app.role}
+                </p>
+
+                <p className="text-xs text-muted-foreground mt-1">
+                  Applied on {app.appliedOn}
+                </p>
+              </div>
+
+              <div>
+                {getStatusBadge(app.status)}
+              </div>
+
+            </div>
+          ))}
+
+        </CardContent>
+      </Card>
+
+    </div>
+  );
+}

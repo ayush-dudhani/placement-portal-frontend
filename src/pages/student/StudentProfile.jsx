@@ -1,115 +1,209 @@
 import { useState } from "react";
-import "../../styles/studentProfile.css";
 
-const StudentProfile = () => {
+import ProfileSidebar from "@/components/profile/ProfileSidebar";
+import ProfileCompletion from "@/components/profile/ProfileCompletion";
+import PersonalInfoCard from "@/components/profile/PersonalInfoCard";
+import AcademicInfoCard from "@/components/profile/AcademicInfoCard";
+import ProfessionalInfoCard from "@/components/profile/ProfessionalInfoCard";
+import SkillsCard from "@/components/profile/SkillsCard";
+import SaveProfileBar from "@/components/profile/SaveProfileBar";
+
+export default function StudentProfile() {
   const [profile, setProfile] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
+    firstName: "",
+    lastName: "",
+    mobileNo: "",
+    rollNumber: "",
+
     branch: "",
-    year: "",
+    yearOfPassing: "",
     cgpa: "",
-    skills: "",
+
+    tenthPercentage: "",
+    twelfthPercentage: "",
+    diplomaPercentage: "",
+    activeBacklogs: "",
+
+    gender: "",
+    dateOfBirth: "",
+
+    linkedinUrl: "",
+    githubUrl: "",
+
+    resumeFile: null,
   });
 
+  const [skills, setSkills] = useState([
+    "Java",
+    "React",
+    "SQL",
+  ]);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const profileFields = [
+    "firstName",
+    "lastName",
+    "mobileNo",
+    "rollNumber",
+    "branch",
+    "yearOfPassing",
+    "cgpa",
+    "tenthPercentage",
+    "twelfthPercentage",
+    "activeBacklogs",
+    "gender",
+    "dateOfBirth",
+    "linkedinUrl",
+    "githubUrl",
+  ];
+
   const completion = Math.round(
-    Object.values(profile).filter((v) => v !== "").length /
-      Object.keys(profile).length *
+    (
+      profileFields.filter(
+        (field) =>
+          profile[field] &&
+          profile[field]
+            .toString()
+            .trim() !== ""
+      ).length +
+      (skills.length > 0 ? 1 : 0) +
+      (profile.resumeFile ? 1 : 0)
+    ) /
+      (profileFields.length + 2) *
       100
   );
 
   const handleChange = (e) => {
-    setProfile({
-      ...profile,
-      [e.target.name]: e.target.value,
-    });
+    const {
+      name,
+      value,
+      files,
+    } = e.target;
+
+    if (
+      name === "resumeFile"
+    ) {
+      setProfile((prev) => ({
+        ...prev,
+        resumeFile: files[0],
+      }));
+
+      return;
+    }
+
+    setProfile((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
+  const handleSelectChange = (
+    field,
+    value
+  ) => {
+    setProfile((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSave =
+    async () => {
+      try {
+        setLoading(true);
+
+        const payload = {
+          ...profile,
+          skills,
+        };
+
+        console.log(
+          "Saving Profile",
+          payload
+        );
+
+        // TODO:
+        // call backend API
+
+        // await studentApi.updateProfile(payload);
+
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
   return (
-    <div className="profile-page">
+    <div className="min-h-screen bg-muted/20">
+      <div className="flex">
 
-      {/* Completion */}
-      <div className="profile-card">
-        <h3>Profile Completion</h3>
-        <div className="progress-bar">
-          <div className="progress" style={{ width: `${completion}%` }} />
-        </div>
-        <p>{completion}% completed</p>
+        <ProfileSidebar />
+
+        <main className="flex-1 p-8">
+          <div className="max-w-5xl mx-auto space-y-6">
+
+            <div>
+              <h1 className="text-4xl font-bold">
+                My Profile
+              </h1>
+
+              <p className="text-muted-foreground mt-1">
+                Complete your
+                profile to apply
+                for placement
+                opportunities.
+              </p>
+            </div>
+
+            <ProfileCompletion
+              completion={
+                completion
+              }
+            />
+
+            <PersonalInfoCard
+              profile={profile}
+              handleChange={
+                handleChange
+              }
+            />
+
+            <AcademicInfoCard
+              profile={profile}
+              handleChange={
+                handleChange
+              }
+              handleSelectChange={
+                handleSelectChange
+              }
+            />
+
+            <ProfessionalInfoCard
+              profile={profile}
+              handleChange={
+                handleChange
+              }
+            />
+
+            <SkillsCard
+              skills={skills}
+              setSkills={setSkills}
+            />
+
+            <SaveProfileBar
+              loading={loading}
+              onSave={
+                handleSave
+              }
+            />
+
+          </div>
+        </main>
+
       </div>
-
-      {/* Personal Details */}
-      <div className="profile-card">
-        <h3>Personal Details</h3>
-
-        <div className="form-grid">
-          <input
-            name="fullName"
-            placeholder="Full Name"
-            value={profile.fullName}
-            onChange={handleChange}
-          />
-          <input
-            name="email"
-            placeholder="College Email"
-            value={profile.email}
-            onChange={handleChange}
-          />
-          <input
-            name="phone"
-            placeholder="Mobile Number"
-            value={profile.phone}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-
-      {/* Academic Details */}
-      <div className="profile-card">
-        <h3>Academic Details</h3>
-
-        <div className="form-grid">
-          <input
-            name="branch"
-            placeholder="Branch / Department"
-            value={profile.branch}
-            onChange={handleChange}
-          />
-          <input
-            name="year"
-            placeholder="Passing Year"
-            value={profile.year}
-            onChange={handleChange}
-          />
-          <input
-            name="cgpa"
-            placeholder="CGPA"
-            value={profile.cgpa}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-
-      {/* Skills */}
-      <div className="profile-card">
-        <h3>Skills</h3>
-        <textarea
-          name="skills"
-          placeholder="Enter skills (Java, Spring Boot, React...)"
-          value={profile.skills}
-          onChange={handleChange}
-        />
-      </div>
-
-      {/* Resume */}
-      <div className="profile-card">
-        <h3>Resume</h3>
-        <input type="file" />
-        <p className="hint">Upload PDF only (Max 2MB)</p>
-      </div>
-
-      <button className="save-btn">Save Profile</button>
     </div>
   );
-};
-
-export default StudentProfile;
+}
