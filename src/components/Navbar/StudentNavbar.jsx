@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 import { useTheme } from "@/components/ui/theme-provider";
+import { API_BASE_URL } from "@/config";
 
 export default function StudentNavbar() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function StudentNavbar() {
     try {
       const token = sessionStorage.getItem("token");
 
-      await fetch("http://localhost:8080/auth/logout", {
+      await fetch(`${API_BASE_URL}/auth/logout`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

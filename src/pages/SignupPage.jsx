@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { Label } from "@/components/ui/label";
+import { API_BASE_URL } from "../config";
 
 export default function SignupPage() {
   const [collegeName, setCollegeName] = useState("");
@@ -33,7 +34,7 @@ export default function SignupPage() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/auth/signup",
+        `${API_BASE_URL}/auth/signup`,
         {
           method: "POST",
           headers: {
