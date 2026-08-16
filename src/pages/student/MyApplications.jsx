@@ -32,23 +32,6 @@ const applications = [
   },
 ];
 
-const getStatusLabel = (status) => {
-  switch (status) {
-    case "APPLIED":
-      return "Applied";
-    case "UNDER_REVIEW":
-      return "Under Review";
-    case "SHORTLISTED":
-      return "Shortlisted";
-    case "REJECTED":
-      return "Not Selected";
-    case "SELECTED":
-      return "Selected";
-    default:
-      return status;
-  }
-};
-
 const getStatusBadge = (status) => {
   switch (status) {
     case "APPLIED":

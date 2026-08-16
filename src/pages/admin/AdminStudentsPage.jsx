@@ -1,0 +1,31 @@
+import { Download, Filter, Search, SlidersHorizontal, UserRound } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const students = [
+  { name: "Aditi Kulkarni", roll: "PCCOE23CS014", branch: "Computer", cgpa: "9.12", profile: 100, status: "Placed", applications: 5 },
+  { name: "Rohan Shah", roll: "PCCOE23IT032", branch: "Information Tech", cgpa: "8.74", profile: 92, status: "Active", applications: 4 },
+  { name: "Nisha Mehta", roll: "PCCOE23CS061", branch: "Computer", cgpa: "8.42", profile: 86, status: "Active", applications: 3 },
+  { name: "Arjun Patil", roll: "PCCOE23ENT019", branch: "ENTC", cgpa: "7.96", profile: 68, status: "Profile incomplete", applications: 1 },
+  { name: "Priya Deshmukh", roll: "PCCOE23ME047", branch: "Mechanical", cgpa: "8.11", profile: 100, status: "Placed", applications: 6 },
+  { name: "Vivek Joshi", roll: "PCCOE23IT048", branch: "Information Tech", cgpa: "7.63", profile: 74, status: "Active", applications: 2 },
+];
+
+const statusTone = { Placed: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300", Active: "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300", "Profile incomplete": "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" };
+
+export default function AdminStudentsPage() {
+  const [query, setQuery] = useState("");
+  const [branch, setBranch] = useState("all");
+  const [status, setStatus] = useState("all");
+  const filtered = useMemo(() => students.filter((student) => (student.name.toLowerCase().includes(query.toLowerCase()) || student.roll.toLowerCase().includes(query.toLowerCase())) && (branch === "all" || student.branch === branch) && (status === "all" || student.status === status)), [branch, query, status]);
+  return <div className="space-y-8">
+    <section className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-sm font-bold uppercase tracking-[.18em] text-indigo-600">Student directory</p><h1 className="mt-2 text-3xl font-bold tracking-tight">Students</h1><p className="mt-2 text-muted-foreground">Find students, assess placement readiness and resolve profile gaps.</p></div><Button variant="outline" className="h-10"><Download className="mr-2 h-4 w-4" />Export list</Button></section>
+    <section className="grid gap-4 sm:grid-cols-3">{[["1,248", "Eligible students", "Across all branches"], ["186", "Students placed", "74% placement rate"], ["36", "Need profile support", "Resume or details missing"]].map(([value, label, note]) => <Card key={label}><CardContent className="pt-6"><p className="text-sm text-muted-foreground">{label}</p><p className="mt-1 text-3xl font-bold">{value}</p><p className="mt-3 text-sm text-muted-foreground">{note}</p></CardContent></Card>)}</section>
+    <Card><CardContent className="space-y-4 py-5"><div className="flex items-center gap-2 text-sm font-semibold"><SlidersHorizontal className="h-4 w-4 text-indigo-600" />Find students</div><div className="grid gap-3 lg:grid-cols-[1fr_180px_180px_auto]"><div className="relative"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><Input value={query} onChange={(event) => setQuery(event.target.value)} className="h-10 pl-9" placeholder="Search by student name or roll number" /></div><Select value={branch} onValueChange={setBranch}><SelectTrigger className="h-10 w-full"><SelectValue placeholder="Branch" /></SelectTrigger><SelectContent><SelectItem value="all">All branches</SelectItem><SelectItem value="Computer">Computer</SelectItem><SelectItem value="Information Tech">Information Tech</SelectItem><SelectItem value="ENTC">ENTC</SelectItem><SelectItem value="Mechanical">Mechanical</SelectItem></SelectContent></Select><Select value={status} onValueChange={setStatus}><SelectTrigger className="h-10 w-full"><SelectValue placeholder="Status" /></SelectTrigger><SelectContent><SelectItem value="all">All statuses</SelectItem><SelectItem value="Active">Active</SelectItem><SelectItem value="Placed">Placed</SelectItem><SelectItem value="Profile incomplete">Profile incomplete</SelectItem></SelectContent></Select><Button variant="outline" className="h-10" onClick={() => { setQuery(""); setBranch("all"); setStatus("all"); }}><Filter className="mr-2 h-4 w-4" />Reset</Button></div></CardContent></Card>
+    <Card><CardContent className="overflow-x-auto p-0"><div className="min-w-[760px]"><div className="grid grid-cols-[1.7fr_1fr_.8fr_.9fr_.8fr_.6fr] gap-4 border-b bg-slate-50 px-6 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground dark:bg-slate-900"><span>Student</span><span>Branch</span><span>CGPA</span><span>Profile</span><span>Status</span><span>Applications</span></div>{filtered.map((student) => <div key={student.roll} className="grid grid-cols-[1.7fr_1fr_.8fr_.9fr_.8fr_.6fr] items-center gap-4 border-b px-6 py-4 last:border-0"><div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">{student.name.split(" ").map((word) => word[0]).join("")}</span><div><p className="font-semibold">{student.name}</p><p className="mt-0.5 text-xs text-muted-foreground">{student.roll}</p></div></div><span className="text-sm">{student.branch}</span><span className="text-sm font-medium">{student.cgpa}</span><div><p className="text-sm font-medium">{student.profile}%</p><div className="mt-1.5 h-1.5 w-20 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800"><div className="h-full rounded-full bg-indigo-500" style={{ width: `${student.profile}%` }} /></div></div><Badge className={statusTone[student.status]}>{student.status}</Badge><span className="text-sm font-medium">{student.applications}</span></div>)}{filtered.length === 0 && <div className="py-14 text-center text-sm text-muted-foreground"><UserRound className="mx-auto mb-3 h-5 w-5" />No students match these filters.</div>}</div></CardContent></Card>
+  </div>;
+}

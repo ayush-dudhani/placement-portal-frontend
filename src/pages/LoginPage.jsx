@@ -51,10 +51,8 @@ const LoginPage = () => {
         data.token
       );
 
-      sessionStorage.setItem(
-        "role",
-        data.role
-      );
+      const role = data.role?.toUpperCase();
+      sessionStorage.setItem("role", role || "");
 
       if (data.username) {
         sessionStorage.setItem(
@@ -70,12 +68,12 @@ const LoginPage = () => {
         );
       }
 
-      if (data.role === "STUDENT") {
+      if (role === "STUDENT") {
         navigate("/student/dashboard");
-      } else if (data.role === "ADMIN") {
+      } else if (role === "ADMIN") {
         navigate("/admin/dashboard");
       } else {
-        navigate("/login");
+        throw new Error("Your account does not have a recognised portal role.");
       }
     } catch (err) {
       setError(

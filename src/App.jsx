@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import "../src/App.css";
 import PublicLayout from "./layouts/PublicLayout";
 import StudentLayout from "./layouts/StudentLayout";
@@ -22,6 +22,12 @@ import LandingPage from "./pages/LandingPage";
 import CompaniesPage from "./pages/student/CompaniesPage";
 import CompanyDetailsPage from "./pages/student/CompanyDetailsPage";
 import LegacyCompanyRedirect from "./pages/student/LegacyCompanyRedirect";
+import AdminLayout from "./layouts/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminDrivesPage from "./pages/admin/AdminDrivesPage";
+import AdminStudentsPage from "./pages/admin/AdminStudentsPage";
+import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage";
+import RequireRole from "./components/RequireRole";
 
 function App() {
   return (
@@ -37,14 +43,27 @@ function App() {
         </Route>
 
         {/* STUDENT ROUTES */}
-        <Route path="/student" element={<StudentLayout />}>
-          <Route path="dashboard" element={<StudentDashboard />} />
-          <Route path="profile" element={<StudentProfile />} />
-          <Route path="drives" element={<UpcomingDrives />} />
-          <Route path="applications" element={<MyApplications />} />
-          <Route path="companies" element={<CompaniesPage />} />
-          <Route path="company" element={<CompanyDetailsPage />} />
-          <Route path="companies/:slug" element={<LegacyCompanyRedirect />} />
+        <Route element={<RequireRole role="STUDENT" />}>
+          <Route path="/student" element={<StudentLayout />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<StudentDashboard />} />
+            <Route path="profile" element={<StudentProfile />} />
+            <Route path="drives" element={<UpcomingDrives />} />
+            <Route path="applications" element={<MyApplications />} />
+            <Route path="companies" element={<CompaniesPage />} />
+            <Route path="company" element={<CompanyDetailsPage />} />
+            <Route path="companies/:slug" element={<LegacyCompanyRedirect />} />
+          </Route>
+        </Route>
+
+        <Route element={<RequireRole role="ADMIN" />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="drives" element={<AdminDrivesPage />} />
+            <Route path="students" element={<AdminStudentsPage />} />
+            <Route path="analytics" element={<AdminAnalyticsPage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
