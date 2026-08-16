@@ -81,9 +81,10 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4 py-8">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-violet-100 px-4 py-10 dark:from-slate-950 dark:via-slate-950 dark:to-indigo-950">
+      <div className="absolute -right-24 bottom-16 h-80 w-80 rounded-full bg-violet-300/30 blur-3xl" />
 
-      <Card className="w-full max-w-md">
+      <Card className="relative w-full max-w-md border-white/80 bg-white/90 shadow-2xl shadow-indigo-950/15 backdrop-blur dark:border-slate-700 dark:bg-slate-900/90">
 
         <CardHeader className="space-y-2 text-center">
 
@@ -95,7 +96,7 @@ export default function SignupPage() {
             />
           </div>
 
-          <CardTitle className="text-2xl">
+          <CardTitle className="text-2xl font-bold tracking-tight">
             Create Account
           </CardTitle>
 
@@ -198,7 +199,7 @@ export default function SignupPage() {
 
             <Button
               type="submit"
-              className="w-full"
+              className="h-11 w-full bg-indigo-600 text-white hover:bg-indigo-700"
               disabled={loading}
             >
               {loading

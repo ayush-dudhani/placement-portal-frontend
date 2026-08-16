@@ -18,6 +18,10 @@ import UpcomingDrives from "./pages/student/UpcomingDrives";
 import MyApplications from "./pages/student/MyApplications";
 import SignupPage from "./pages/SignupPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import LandingPage from "./pages/LandingPage";
+import CompaniesPage from "./pages/student/CompaniesPage";
+import CompanyDetailsPage from "./pages/student/CompanyDetailsPage";
+import LegacyCompanyRedirect from "./pages/student/LegacyCompanyRedirect";
 
 function App() {
   return (
@@ -25,6 +29,7 @@ function App() {
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route element={<PublicLayout />}>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -37,6 +42,9 @@ function App() {
           <Route path="profile" element={<StudentProfile />} />
           <Route path="drives" element={<UpcomingDrives />} />
           <Route path="applications" element={<MyApplications />} />
+          <Route path="companies" element={<CompaniesPage />} />
+          <Route path="company" element={<CompanyDetailsPage />} />
+          <Route path="companies/:slug" element={<LegacyCompanyRedirect />} />
         </Route>
       </Routes>
     </BrowserRouter>
