@@ -51,10 +51,8 @@ const LoginPage = () => {
         data.token
       );
 
-      sessionStorage.setItem(
-        "role",
-        data.role
-      );
+      const role = data.role?.toUpperCase();
+      sessionStorage.setItem("role", role || "");
 
       if (data.username) {
         sessionStorage.setItem(
@@ -70,12 +68,12 @@ const LoginPage = () => {
         );
       }
 
-      if (data.role === "STUDENT") {
+      if (role === "STUDENT") {
         navigate("/student/dashboard");
-      } else if (data.role === "ADMIN") {
+      } else if (role === "ADMIN") {
         navigate("/admin/dashboard");
       } else {
-        navigate("/login");
+        throw new Error("Your account does not have a recognised portal role.");
       }
     } catch (err) {
       setError(
@@ -87,9 +85,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-violet-100 px-4 py-10 dark:from-slate-950 dark:via-slate-950 dark:to-indigo-950">
+      <div className="absolute -left-24 top-16 h-72 w-72 rounded-full bg-indigo-300/30 blur-3xl" />
 
-      <Card className="w-full max-w-md">
+      <Card className="relative w-full max-w-md border-white/80 bg-white/90 shadow-2xl shadow-indigo-950/15 backdrop-blur dark:border-slate-700 dark:bg-slate-900/90">
 
         <CardHeader className="space-y-2 text-center">
 
@@ -101,12 +100,12 @@ const LoginPage = () => {
             />
           </div>
 
-          <CardTitle className="text-2xl">
-            Placement Portal
+          <CardTitle className="text-2xl font-bold tracking-tight">
+            Welcome back
           </CardTitle>
 
           <p className="text-sm text-muted-foreground">
-            Login using your college credentials
+            Sign in to continue your career journey
           </p>
 
         </CardHeader>
@@ -160,7 +159,7 @@ const LoginPage = () => {
 
             <Button
               type="submit"
-              className="w-full"
+              className="h-11 w-full bg-indigo-600 text-white hover:bg-indigo-700"
               disabled={loading}
             >
               {loading

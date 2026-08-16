@@ -44,9 +44,10 @@ export default function ProfileSidebar() {
   };
 
   return (
-    <aside className="w-64 border-r bg-background min-h-screen sticky top-0">
+    <aside className="sticky top-16 hidden min-h-[calc(100vh-4rem)] w-64 shrink-0 border-r border-slate-200 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 lg:block">
       <div className="p-6">
-        <h2 className="text-xl font-bold">
+        <p className="text-xs font-bold uppercase tracking-[.16em] text-indigo-600">Student workspace</p>
+        <h2 className="mt-2 text-xl font-bold tracking-tight">
           My Profile
         </h2>
 
@@ -65,7 +66,7 @@ export default function ProfileSidebar() {
               onClick={() =>
                 scrollToSection(item.id)
               }
-              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-indigo-50 hover:text-indigo-700 dark:hover:bg-indigo-950 dark:hover:text-indigo-300"
             >
               <Icon className="w-4 h-4" />
               {item.label}

@@ -1,6 +1,6 @@
 import { Bell, LogOut, User, GraduationCap, Moon, Sun } from "lucide-react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +11,7 @@ import { API_BASE_URL } from "@/config";
 
 export default function StudentNavbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { theme, setTheme } = useTheme();
 
   const username =
@@ -33,8 +34,8 @@ export default function StudentNavbar() {
   };
 
   return (
-    <header className="border-b bg-background">
-      <div className="max-w-7xl mx-auto h-16 px-6 flex items-center justify-between">
+    <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-background/90 backdrop-blur dark:border-slate-800">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-6">
         {/* Left */}
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-3">
@@ -43,43 +44,25 @@ export default function StudentNavbar() {
               alt="College Logo"
               className="h-10 w-10"
             /> */}
-            <GraduationCap className="h-7 w-7" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/25"><GraduationCap className="h-5 w-5" /></div>
 
             <div>
-              <h2 className="font-semibold">Placement Portal</h2>
+              <h2 className="font-bold tracking-tight">Placement Portal</h2>
 
               <p className="text-xs text-muted-foreground">PCCOE</p>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              to="/student/dashboard"
-              className="text-sm hover:text-primary"
-            >
-              Dashboard
-            </Link>
-
-            <Link to="/student/drives" className="text-sm hover:text-primary">
-              Drives
-            </Link>
-
-            <Link
-              to="/student/applications"
-              className="text-sm hover:text-primary"
-            >
-              Applications
-            </Link>
-
-            <Link to="/student/profile" className="text-sm hover:text-primary">
-              Profile
-            </Link>
+          <nav className="hidden items-center gap-1 md:flex">
+            {[["/student/dashboard", "Dashboard"], ["/student/drives", "Drives"], ["/student/companies", "Companies"], ["/student/applications", "Applications"], ["/student/profile", "Profile"]].map(([to, label]) => (
+              <Link key={to} to={to} className={`rounded-lg px-3 py-2 text-sm font-medium transition ${(location.pathname === to || (to === "/student/companies" && location.pathname === "/student/company")) ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>{label}</Link>
+            ))}
           </nav>
         </div>
 
         {/* Right */}
         <div className="flex items-center gap-4">
-          <Button size="icon" variant="ghost">
+          <Button size="icon" variant="ghost" className="rounded-full">
             <Bell className="h-5 w-5" />
           </Button>
           <Button
@@ -105,7 +88,7 @@ export default function StudentNavbar() {
               </AvatarFallback>
             </Avatar>
 
-            <span className="hidden md:block text-sm">{username}</span>
+            <span className="hidden max-w-28 truncate text-sm font-medium md:block">{username}</span>
           </div>
 
           <Button variant="outline" size="sm" onClick={handleLogout}>

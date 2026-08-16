@@ -4,6 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
 
@@ -30,23 +31,6 @@ const applications = [
     status: "SHORTLISTED",
   },
 ];
-
-const getStatusLabel = (status) => {
-  switch (status) {
-    case "APPLIED":
-      return "Applied";
-    case "UNDER_REVIEW":
-      return "Under Review";
-    case "SHORTLISTED":
-      return "Shortlisted";
-    case "REJECTED":
-      return "Not Selected";
-    case "SELECTED":
-      return "Selected";
-    default:
-      return status;
-  }
-};
 
 const getStatusBadge = (status) => {
   switch (status) {
@@ -96,10 +80,11 @@ const getStatusBadge = (status) => {
 
 export default function MyApplications() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
 
       <div>
-        <h1 className="text-3xl font-bold">
+        <p className="text-sm font-bold uppercase tracking-[.18em] text-indigo-600">Application centre</p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight">
           My Applications
         </h1>
 
@@ -109,7 +94,7 @@ export default function MyApplications() {
       </div>
 
       {/* Status Guide */}
-      <Card>
+      <Card className="border-indigo-100 bg-indigo-50/40 dark:border-indigo-950 dark:bg-indigo-950/20">
         <CardHeader>
           <CardTitle>
             Application Status Guide
@@ -164,7 +149,7 @@ export default function MyApplications() {
       </Card>
 
       {/* Applications */}
-      <Card>
+      <Card className="shadow-md shadow-indigo-950/5">
         <CardHeader>
           <CardTitle>
             Applications
@@ -176,12 +161,14 @@ export default function MyApplications() {
           {applications.map((app) => (
             <div
               key={app.id}
-              className="flex flex-col md:flex-row md:items-center md:justify-between border rounded-lg p-4 gap-3"
+              className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4 transition hover:border-indigo-200 hover:bg-indigo-50/40 md:flex-row md:items-center md:justify-between dark:border-slate-800 dark:bg-slate-900"
             >
 
               <div>
                 <h3 className="font-semibold">
-                  {app.company}
+                  <Link className="hover:text-indigo-600 hover:underline" to={`/student/companies/${app.company.toLowerCase()}`}>
+                    {app.company}
+                  </Link>
                 </h3>
 
                 <p className="text-sm text-muted-foreground">

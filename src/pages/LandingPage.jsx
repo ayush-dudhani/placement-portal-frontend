@@ -1,77 +1,32 @@
-import { useState } from "react";
-import axiosClient from "../api/axiosClient";
-import "../styles/login.css";
+import { ArrowRight, Award, BarChart3, BriefcaseBusiness, Building2, CalendarDays, CheckCircle2, FileCheck2, Search, Sparkles, UsersRound } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
-const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const features = [
+  { icon: Search, title: "Discover the right roles", text: "Explore verified campus opportunities that suit your skills and goals." },
+  { icon: FileCheck2, title: "Apply with confidence", text: "Keep your profile, resume and applications organised in one place." },
+  { icon: CalendarDays, title: "Never miss a drive", text: "Stay ahead with timely updates about interviews, tests and deadlines." },
+];
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      const res = await axiosClient.post("/auth/login", {
-        username,
-        password,
-      });
-
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
-
-      window.location.href = "/";
-    } catch (err) {
-      setError("Invalid username/email or password");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function LandingPage() {
   return (
-    <div className="login-wrapper">
-      <div className="login-card">
-        <h2 className="login-title">Welcome Back</h2>
-        <p className="login-subtitle">Login to your account</p>
-
-        {error && <p className="login-error">{error}</p>}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Username or Email</label>
-            <input
-              type="text"
-              placeholder="Enter username or email"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+    <main className="overflow-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50">
+      <section className="relative isolate border-b border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-violet-100 px-5 py-16 dark:border-indigo-950 dark:from-slate-950 dark:via-slate-950 dark:to-indigo-950 sm:px-6 lg:py-24">
+        <div className="absolute inset-0 -z-10 opacity-40 [background-image:radial-gradient(#818cf8_1px,transparent_1px)] [background-size:24px_24px]" />
+        <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_.95fr]">
+          <div className="max-w-2xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white/80 px-3.5 py-1.5 text-sm font-medium text-indigo-700 shadow-sm dark:border-indigo-800 dark:bg-slate-900/80 dark:text-indigo-300"><Sparkles className="h-4 w-4" /> Your career journey starts here</div>
+            <h1 className="text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">Where ambition meets <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">opportunity.</span></h1>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600 dark:text-slate-300">Build a profile that stands out, find campus opportunities that matter, and take the next confident step toward your career.</p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button asChild size="lg" className="h-12 bg-indigo-600 px-6 text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-700"><Link to="/signup">Create your profile <ArrowRight className="ml-2 h-4 w-4" /></Link></Button><Button asChild size="lg" variant="outline" className="h-12 border-slate-300 bg-white/70 px-6 dark:bg-slate-900"><Link to="/login">Sign in to portal</Link></Button></div>
+            <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-slate-600 dark:text-slate-300">{["Verified opportunities", "One streamlined profile", "Timely drive alerts"].map((item) => <span className="flex items-center gap-2" key={item}><CheckCircle2 className="h-4 w-4 text-emerald-500" />{item}</span>)}</div>
           </div>
-
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <p className="login-footer">
-          Don’t have an account? <a href="/register">Register</a>
-        </p>
-      </div>
-    </div>
+          <div className="relative mx-auto w-full max-w-lg"><div className="absolute -inset-6 -z-10 rounded-full bg-indigo-400/25 blur-3xl" /><div className="rounded-3xl border border-white/80 bg-white/85 p-5 shadow-2xl shadow-indigo-950/15 backdrop-blur dark:border-slate-700 dark:bg-slate-900/90"><div className="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-slate-800"><div><p className="text-xs font-semibold uppercase tracking-widest text-indigo-600">Career dashboard</p><p className="mt-1 font-semibold">Good morning, Alex</p></div><div className="rounded-xl bg-indigo-50 p-2.5 text-indigo-600 dark:bg-indigo-950"><BriefcaseBusiness className="h-5 w-5" /></div></div><div className="mt-5 grid grid-cols-3 gap-3">{[["08", "Open roles"], ["03", "Applications"], ["91%", "Profile"]].map(([value, label]) => <div className="rounded-2xl bg-slate-50 p-3 dark:bg-slate-800" key={label}><p className="text-xl font-bold">{value}</p><p className="mt-1 text-xs text-slate-500">{label}</p></div>)}</div><div className="mt-5 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 to-violet-50 p-4 dark:border-indigo-900 dark:from-indigo-950/60 dark:to-violet-950/40"><div className="flex items-start justify-between"><div><p className="text-sm font-semibold">Product Intern</p><p className="mt-1 text-xs text-slate-500">Northstar Technologies · Pune</p></div><span className="rounded-full bg-white px-2 py-1 text-[10px] font-bold text-indigo-600 dark:bg-slate-800">NEW</span></div><div className="mt-4 h-1.5 overflow-hidden rounded-full bg-indigo-100 dark:bg-indigo-900"><div className="h-full w-[78%] rounded-full bg-indigo-500" /></div><p className="mt-2 text-xs text-slate-500">Application closes in 4 days</p></div><div className="mt-4 flex items-center gap-3 rounded-2xl border border-slate-100 p-3 dark:border-slate-800"><div className="rounded-lg bg-emerald-100 p-2 text-emerald-600 dark:bg-emerald-950"><Award className="h-4 w-4" /></div><div><p className="text-sm font-medium">Profile strength is excellent</p><p className="text-xs text-slate-500">You&apos;re ready to apply.</p></div></div></div></div>
+        </div>
+      </section>
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6"><div className="mx-auto max-w-2xl text-center"><p className="text-sm font-bold uppercase tracking-[.18em] text-indigo-600">Designed for your next step</p><h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Everything you need to move forward.</h2><p className="mt-4 text-slate-600 dark:text-slate-300">A simple, focused space to manage every part of your campus placement journey.</p></div><div className="mt-12 grid gap-5 md:grid-cols-3">{features.map(({ icon: Icon, title, text }) => <article className="group rounded-2xl border border-slate-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-950/5 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-indigo-800" key={title}><div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 transition group-hover:bg-indigo-600 group-hover:text-white dark:bg-indigo-950"><Icon className="h-5 w-5" /></div><h3 className="mt-5 text-lg font-bold">{title}</h3><p className="mt-2 leading-7 text-slate-600 dark:text-slate-300">{text}</p></article>)}</div></section>
+      <section className="border-y border-slate-200 bg-white px-5 py-16 dark:border-slate-800 dark:bg-slate-900 sm:px-6"><div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 text-center sm:grid-cols-4">{[["500+", "Students building careers", UsersRound], ["40+", "Hiring partners", Building2], ["120+", "Opportunities posted", BriefcaseBusiness], ["92%", "Profile completion", BarChart3]].map(([value, label, Icon]) => <div key={label}><Icon className="mx-auto mb-3 h-5 w-5 text-indigo-600" /><p className="text-3xl font-bold tracking-tight">{value}</p><p className="mt-1 text-sm text-slate-500">{label}</p></div>)}</div></section>
+      <section className="px-5 py-20 sm:px-6"><div className="mx-auto max-w-5xl overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-700 to-violet-700 px-7 py-12 text-center text-white shadow-xl shadow-indigo-950/20 sm:px-12"><p className="text-sm font-semibold uppercase tracking-[.18em] text-indigo-200">Your future, in motion</p><h2 className="mx-auto mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">Take the first step toward the role you&apos;ve been working for.</h2><p className="mx-auto mt-4 max-w-xl text-indigo-100">Set up your profile today and keep every opportunity within reach.</p><Button asChild size="lg" className="mt-8 h-12 bg-white px-6 text-indigo-700 hover:bg-indigo-50"><Link to="/signup">Get started now <ArrowRight className="ml-2 h-4 w-4" /></Link></Button></div></section>
+    </main>
   );
-};
-
-export default LoginPage;
+}

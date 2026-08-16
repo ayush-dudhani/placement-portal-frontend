@@ -1,0 +1,21 @@
+import { CalendarDays, ChevronRight, ClipboardCheck, MoreHorizontal, Plus, Search, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+
+const drives = [
+  { company: "Google", role: "Software Engineer Intern", date: "20 Oct 2026", applicants: 128, eligible: 96, stage: "Applications open", tone: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" },
+  { company: "Amazon", role: "SDE-1", date: "18 Oct 2026", applicants: 94, eligible: 81, stage: "Shortlisting", tone: "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300" },
+  { company: "Microsoft", role: "SDE Intern", date: "22 Oct 2026", applicants: 76, eligible: 62, stage: "Applications open", tone: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" },
+  { company: "Infosys", role: "System Engineer", date: "05 Oct 2026", applicants: 214, eligible: 196, stage: "Completed", tone: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300" },
+];
+
+export default function AdminDrivesPage() {
+  return <div className="space-y-8">
+    <section className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-sm font-bold uppercase tracking-[.18em] text-indigo-600">Recruitment management</p><h1 className="mt-2 text-3xl font-bold tracking-tight">Campus drives</h1><p className="mt-2 text-muted-foreground">Create, publish and track every company visit from one workspace.</p></div><Button className="h-10 bg-indigo-600 text-white hover:bg-indigo-700"><Plus className="mr-2 h-4 w-4" />Create drive</Button></section>
+    <section className="grid gap-4 sm:grid-cols-3">{[["12", "Active drives", "3 need review"], ["426", "Total applications", "This placement season"], ["81%", "Eligibility verified", "345 of 426 applications"]].map(([value, label, note]) => <Card key={label}><CardContent className="pt-6"><p className="text-sm text-muted-foreground">{label}</p><p className="mt-1 text-3xl font-bold">{value}</p><p className="mt-3 text-sm text-muted-foreground">{note}</p></CardContent></Card>)}</section>
+    <Card><CardContent className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between"><div className="relative w-full sm:max-w-sm"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><Input className="h-10 pl-9" placeholder="Search company or role" /></div><div className="flex gap-2"><Button size="sm" variant="outline">All stages</Button><Button size="sm" variant="outline">This month</Button></div></CardContent></Card>
+    <section className="space-y-3">{drives.map((drive) => <Card key={drive.company} className="transition hover:shadow-md"><CardContent className="flex flex-col gap-5 py-5 lg:flex-row lg:items-center"><div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">{drive.company.slice(0, 1)}</div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><h2 className="font-semibold">{drive.company}</h2><Badge className={drive.tone}>{drive.stage}</Badge></div><p className="mt-1 text-sm text-muted-foreground">{drive.role}</p></div><div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm sm:flex sm:items-center"><span className="flex items-center gap-2 text-muted-foreground"><CalendarDays className="h-4 w-4 text-indigo-500" />{drive.date}</span><span className="flex items-center gap-2 text-muted-foreground"><Users className="h-4 w-4 text-indigo-500" />{drive.applicants} applicants</span><span className="flex items-center gap-2 text-muted-foreground"><ClipboardCheck className="h-4 w-4 text-indigo-500" />{drive.eligible} eligible</span></div><div className="flex items-center gap-1"><Button variant="ghost" size="sm" className="text-indigo-600">Manage <ChevronRight className="ml-1 h-4 w-4" /></Button><Button variant="ghost" size="icon" aria-label={`More actions for ${drive.company}`}><MoreHorizontal className="h-4 w-4" /></Button></div></CardContent></Card>)}</section>
+  </div>;
+}
