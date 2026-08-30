@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Building2, ExternalLink, IndianRupee, MapPin, Search, Star, UsersRound, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { companyList } from "@/data/companies";
+import { portalApi } from "@/api/portalApi";
+import StaticFallbackNotice from "@/components/StaticFallbackNotice";
 
 const categories = {
   google: "Product & AI",
@@ -16,14 +18,22 @@ const categories = {
 export default function CompaniesPage() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
+  const [companies, setCompanies] = useState([]);
+  const [fallback, setFallback] = useState(false);
+  useEffect(() => {
+    portalApi.companies().then((page) => {
+      setCompanies((page.content || []).map((company) => ({ ...company, slug: String(company.id), location: "", rating: "—", roles: [], outcomes: { selected: 0, package: "—", year: "" } })));
+    }).catch(() => { setCompanies(companyList); setFallback(true); });
+  }, []);
   const companyCategories = ["All", ...new Set(Object.values(categories))];
-  const visibleCompanies = useMemo(() => companyList.filter((company) => {
+  const visibleCompanies = useMemo(() => companies.filter((company) => {
     const searchable = `${company.name} ${company.location} ${company.outcomes.selected} ${company.outcomes.package} ${company.roles.map((role) => `${role.title} ${role.package}`).join(" ")}`.toLowerCase();
     return searchable.includes(query.toLowerCase()) && (category === "All" || categories[company.slug] === category);
-  }), [category, query]);
-  const totalSelections = companyList.reduce((total, company) => total + Number.parseInt(company.outcomes.selected, 10), 0);
+  }), [category, companies, query]);
+  const totalSelections = companies.reduce((total, company) => total + (Number.parseInt(company.outcomes?.selected, 10) || 0), 0);
 
   return <div className="space-y-8">
+    {fallback && <StaticFallbackNotice resource="company data" />}
     <section>
       <p className="text-sm font-bold uppercase tracking-[.18em] text-indigo-600">Hiring partners</p>
       <h1 className="mt-2 text-3xl font-bold tracking-tight">Company directory</h1>
@@ -31,7 +41,7 @@ export default function CompaniesPage() {
     </section>
 
     <section className="grid gap-4 sm:grid-cols-3">
-      {[[companyList.length, "Verified companies", "Campus hiring partners"], [companyList.reduce((total, company) => total + company.roles.length, 0), "Roles offered", "Across partner companies"], [totalSelections, "Placed last year", "From listed outcomes"]].map(([value, label, note]) => <Card key={label}><CardContent className="pt-6"><p className="text-3xl font-bold">{value}</p><p className="mt-1 font-medium">{label}</p><p className="mt-2 text-sm text-muted-foreground">{note}</p></CardContent></Card>)}
+      {[[companies.length, "Verified companies", "Campus hiring partners"], [companies.reduce((total, company) => total + company.roles.length, 0), "Roles offered", "Across partner companies"], [totalSelections, "Placed last year", "From listed outcomes"]].map(([value, label, note]) => <Card key={label}><CardContent className="pt-6"><p className="text-3xl font-bold">{value}</p><p className="mt-1 font-medium">{label}</p><p className="mt-2 text-sm text-muted-foreground">{note}</p></CardContent></Card>)}
     </section>
 
     <Card className="border-indigo-100 bg-indigo-50/40 dark:border-indigo-950 dark:bg-indigo-950/20">

@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,15 +23,14 @@ export default function AcademicInfoCard({
   );
 
   return (
-    <Card id="academic">
-      <CardHeader>
-        <CardTitle>
-          Academic Information
-        </CardTitle>
+    <>
+      <CardHeader className="border-b border-slate-100 px-5 py-5 dark:border-slate-800">
+        <CardTitle>Academic information</CardTitle>
+        <p className="text-sm text-muted-foreground">These details determine your eligibility for campus drives.</p>
       </CardHeader>
 
-      <CardContent>
-        <div className="grid md:grid-cols-2 gap-4">
+      <CardContent className="p-5 sm:p-6">
+        <div className="grid gap-5 md:grid-cols-2">
 
           <div className="space-y-2">
             <Label>
@@ -58,7 +52,7 @@ export default function AcademicInfoCard({
                 )
               }
             >
-              <SelectTrigger>
+            <SelectTrigger className="h-11 w-full">
                 <SelectValue placeholder="Select Branch" />
               </SelectTrigger>
 
@@ -106,7 +100,7 @@ export default function AcademicInfoCard({
                 )
               }
             >
-              <SelectTrigger>
+            <SelectTrigger className="h-11 w-full">
                 <SelectValue placeholder="Select Year" />
               </SelectTrigger>
 
@@ -143,6 +137,7 @@ export default function AcademicInfoCard({
               value={profile.cgpa}
               onChange={handleChange}
               placeholder="8.50"
+              className="h-11"
             />
 
             <p className="text-xs text-muted-foreground">
@@ -159,6 +154,7 @@ export default function AcademicInfoCard({
               name="activeBacklogs"
               value={profile.activeBacklogs}
               onChange={handleChange}
+              className="h-11"
             />
           </div>
 
@@ -169,6 +165,11 @@ export default function AcademicInfoCard({
               name="tenthPercentage"
               value={profile.tenthPercentage}
               onChange={handleChange}
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              className="h-11"
             />
           </div>
 
@@ -179,6 +180,11 @@ export default function AcademicInfoCard({
               name="twelfthPercentage"
               value={profile.twelfthPercentage}
               onChange={handleChange}
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              className="h-11"
             />
           </div>
 
@@ -189,11 +195,16 @@ export default function AcademicInfoCard({
               name="diplomaPercentage"
               value={profile.diplomaPercentage}
               onChange={handleChange}
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              className="h-11"
             />
           </div>
 
         </div>
       </CardContent>
-    </Card>
+    </>
   );
 }

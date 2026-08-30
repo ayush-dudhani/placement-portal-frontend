@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { KeyRound } from "lucide-react";
 
 export default function ForgotPasswordPage() {
   const [collegeName, setCollegeName] = useState("");
@@ -30,15 +31,16 @@ export default function ForgotPasswordPage() {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/auth/forgot-password`,
+        `${API_BASE_URL}/api/v1/auth/forgot-password`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type":
               "application/json",
           },
           body: JSON.stringify({
-            collegeName,
+            institutionCode: collegeName,
             email,
           }),
         }
@@ -80,16 +82,10 @@ export default function ForgotPasswordPage() {
 
         <CardHeader className="space-y-2 text-center">
 
-          <div className="flex justify-center">
-            <img
-              src="/college-logo.png"
-              alt="College Logo"
-              className="h-16 w-16 object-contain"
-            />
-          </div>
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 dark:bg-indigo-950"><KeyRound className="h-7 w-7" aria-hidden="true" /></div>
 
           <CardTitle className="text-2xl font-bold tracking-tight">
-            Forgot Password
+            Reset your password
           </CardTitle>
 
           <p className="text-sm text-muted-foreground">
@@ -107,13 +103,15 @@ export default function ForgotPasswordPage() {
           >
 
             <div className="space-y-2">
-              <Label>
-                College Name
+              <Label htmlFor="reset-college">
+                Institution Code
               </Label>
 
               <Input
+                id="reset-college"
                 type="text"
-                placeholder="PCCOE"
+                autoComplete="organization"
+                placeholder="DEFAULT"
                 value={collegeName}
                 onChange={(e) =>
                   setCollegeName(
@@ -125,12 +123,14 @@ export default function ForgotPasswordPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>
+              <Label htmlFor="reset-email">
                 College Email
               </Label>
 
               <Input
+                id="reset-email"
                 type="email"
+                autoComplete="email"
                 placeholder="john@college.edu"
                 value={email}
                 onChange={(e) =>
@@ -143,13 +143,13 @@ export default function ForgotPasswordPage() {
             </div>
 
             {error && (
-              <div className="text-sm text-destructive">
+              <div role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-destructive dark:border-rose-950 dark:bg-rose-950/30">
                 {error}
               </div>
             )}
 
             {success && (
-              <div className="text-sm text-green-600">
+              <div role="status" className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:border-emerald-950 dark:bg-emerald-950/30 dark:text-emerald-300">
                 {success}
               </div>
             )}
@@ -161,7 +161,7 @@ export default function ForgotPasswordPage() {
             >
               {loading
                 ? "Processing..."
-                : "Reset Password"}
+                : "Send reset instructions"}
             </Button>
 
           </form>
@@ -171,7 +171,7 @@ export default function ForgotPasswordPage() {
               to="/login"
               className="text-sm text-muted-foreground hover:text-foreground"
             >
-              Back to Login
+              Back to sign in
             </Link>
           </div>
 

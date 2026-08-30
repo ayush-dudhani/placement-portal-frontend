@@ -7,6 +7,7 @@ import {
 
 const ThemeProviderContext = createContext({
   theme: "system",
+  resolvedTheme: "light",
   setTheme: () => null,
 });
 
@@ -21,6 +22,7 @@ export function ThemeProvider({
       localStorage.getItem(storageKey) ||
       defaultTheme
   );
+  const [resolvedTheme, setResolvedTheme] = useState("light");
 
   useEffect(() => {
     const root =
@@ -31,24 +33,22 @@ export function ThemeProvider({
       "dark"
     );
 
-    if (theme === "system") {
-      const systemTheme =
-        window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches
-          ? "dark"
-          : "light";
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const applyTheme = () => {
+      const nextTheme = theme === "system" ? (media.matches ? "dark" : "light") : theme;
+      root.classList.remove("light", "dark");
+      root.classList.add(nextTheme);
+      setResolvedTheme(nextTheme);
+    };
 
-      root.classList.add(systemTheme);
-
-      return;
-    }
-
-    root.classList.add(theme);
+    applyTheme();
+    if (theme === "system") media.addEventListener("change", applyTheme);
+    return () => media.removeEventListener("change", applyTheme);
   }, [theme]);
 
   const value = {
     theme,
+    resolvedTheme,
     setTheme: (theme) => {
       localStorage.setItem(
         storageKey,

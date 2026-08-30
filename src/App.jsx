@@ -3,17 +3,9 @@ import "../src/App.css";
 import PublicLayout from "./layouts/PublicLayout";
 import StudentLayout from "./layouts/StudentLayout";
 
-// import Login from "./pages/auth/Login";
-// import Register from "./pages/auth/Register";
-
-// import StudentHome from "./pages/student/StudentHome";
 import StudentProfile from "./pages/student/StudentProfile";
-// import UpcomingDrives from "./pages/student/UpcomingDrives";
-// import MyApplications from "./pages/student/MyApplications";
 import LoginPage from "./pages/LoginPage";
 import StudentDashboard from "./pages/student/StudentDashboard";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 import UpcomingDrives from "./pages/student/UpcomingDrives";
 import MyApplications from "./pages/student/MyApplications";
 import SignupPage from "./pages/SignupPage";
@@ -28,6 +20,7 @@ import AdminDrivesPage from "./pages/admin/AdminDrivesPage";
 import AdminStudentsPage from "./pages/admin/AdminStudentsPage";
 import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage";
 import RequireRole from "./components/RequireRole";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -39,7 +32,6 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          {/* <Route path="/register" element={<Register />} /> */}
         </Route>
 
         {/* STUDENT ROUTES */}
@@ -65,6 +57,7 @@ function App() {
             <Route path="analytics" element={<AdminAnalyticsPage />} />
           </Route>
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

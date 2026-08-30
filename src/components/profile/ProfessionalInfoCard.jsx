@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,14 +9,13 @@ export default function ProfessionalInfoCard({
   handleChange,
 }) {
   return (
-    <Card id="professional">
-      <CardHeader>
-        <CardTitle>
-          Professional Information
-        </CardTitle>
+    <>
+      <CardHeader className="border-b border-slate-100 px-5 py-5 dark:border-slate-800">
+        <CardTitle>Career links & resume</CardTitle>
+        <p className="text-sm text-muted-foreground">Share proof of your work and the resume companies will receive.</p>
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 p-5 sm:p-6">
 
         <div className="grid md:grid-cols-2 gap-4">
 
@@ -33,6 +27,8 @@ export default function ProfessionalInfoCard({
               value={profile.linkedinUrl}
               onChange={handleChange}
               placeholder="https://linkedin.com/in/username"
+              type="url"
+              className="h-11"
             />
           </div>
 
@@ -44,6 +40,8 @@ export default function ProfessionalInfoCard({
               value={profile.githubUrl}
               onChange={handleChange}
               placeholder="https://github.com/username"
+              type="url"
+              className="h-11"
             />
           </div>
 
@@ -52,7 +50,7 @@ export default function ProfessionalInfoCard({
         <div className="space-y-2">
           <Label>Resume Upload</Label>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col items-start gap-3 rounded-xl border border-dashed bg-muted/30 p-4 sm:flex-row sm:items-center">
 
             <Button
               variant="outline"
@@ -75,13 +73,13 @@ export default function ProfessionalInfoCard({
             <span className="text-sm text-muted-foreground">
               {profile.resumeFile
                 ? profile.resumeFile.name
-                : "No file selected"}
+                : profile.resumeName || "No file selected"}
             </span>
-
+            <span className="text-xs text-muted-foreground sm:ml-auto">PDF · max 5 MB</span>
           </div>
         </div>
 
       </CardContent>
-    </Card>
+    </>
   );
 }
