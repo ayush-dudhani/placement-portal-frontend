@@ -8,7 +8,11 @@ import { Navigate, Outlet } from "react-router-dom";
 export default function RequireRole({ role }) {
   const sessionRole = sessionStorage.getItem("role")?.toUpperCase();
 
-  if (!sessionStorage.getItem("token")) {
+  if (!sessionStorage.getItem("accessToken")) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!["STUDENT", "ADMIN"].includes(sessionRole)) {
     return <Navigate to="/login" replace />;
   }
 

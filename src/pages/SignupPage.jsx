@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 
 import { Label } from "@/components/ui/label";
 import { API_BASE_URL } from "../config";
+import { GraduationCap, ShieldCheck } from "lucide-react";
 
 export default function SignupPage() {
   const [collegeName, setCollegeName] = useState("");
@@ -34,16 +35,17 @@ export default function SignupPage() {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/auth/signup`,
+        `${API_BASE_URL}/api/v1/auth/register`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type":
               "application/json",
           },
           body: JSON.stringify({
-            collegeName,
-            fullName,
+            institutionCode: collegeName,
+            username: email,
             email,
             password,
           }),
@@ -88,16 +90,10 @@ export default function SignupPage() {
 
         <CardHeader className="space-y-2 text-center">
 
-          <div className="flex justify-center">
-            <img
-              src="/college-logo.png"
-              alt="College Logo"
-              className="h-16 w-16 object-contain"
-            />
-          </div>
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 dark:bg-indigo-950"><GraduationCap className="h-7 w-7" aria-hidden="true" /></div>
 
           <CardTitle className="text-2xl font-bold tracking-tight">
-            Create Account
+            Create your student account
           </CardTitle>
 
           <p className="text-sm text-muted-foreground">
@@ -114,13 +110,15 @@ export default function SignupPage() {
           >
 
             <div className="space-y-2">
-              <Label>
-                College Name
+              <Label htmlFor="signup-college">
+                Institution Code
               </Label>
 
               <Input
+                id="signup-college"
                 type="text"
-                placeholder="PCCOE"
+                autoComplete="organization"
+                placeholder="DEFAULT"
                 value={collegeName}
                 onChange={(e) =>
                   setCollegeName(
@@ -132,12 +130,14 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>
+              <Label htmlFor="signup-name">
                 Full Name
               </Label>
 
               <Input
+                id="signup-name"
                 type="text"
+                autoComplete="name"
                 placeholder="John Doe"
                 value={fullName}
                 onChange={(e) =>
@@ -150,12 +150,14 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>
+              <Label htmlFor="signup-email">
                 College Email
               </Label>
 
               <Input
+                id="signup-email"
                 type="email"
+                autoComplete="email"
                 placeholder="john@college.edu"
                 value={email}
                 onChange={(e) =>
@@ -168,12 +170,15 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>
+              <Label htmlFor="signup-password">
                 Password
               </Label>
 
               <Input
+                id="signup-password"
                 type="password"
+                autoComplete="new-password"
+                minLength={8}
                 placeholder="Create a password"
                 value={password}
                 onChange={(e) =>
@@ -186,13 +191,13 @@ export default function SignupPage() {
             </div>
 
             {error && (
-              <div className="text-sm text-destructive">
+              <div role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-destructive dark:border-rose-950 dark:bg-rose-950/30">
                 {error}
               </div>
             )}
 
             {success && (
-              <div className="text-sm text-green-600">
+              <div role="status" className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:border-emerald-950 dark:bg-emerald-950/30 dark:text-emerald-300">
                 {success}
               </div>
             )}
@@ -204,7 +209,7 @@ export default function SignupPage() {
             >
               {loading
                 ? "Creating Account..."
-                : "Create Account"}
+                : "Create account"}
             </Button>
 
           </form>
@@ -214,13 +219,11 @@ export default function SignupPage() {
               to="/login"
               className="text-sm text-muted-foreground hover:text-foreground"
             >
-              Already have an account? Login
+              Already registered? Sign in
             </Link>
           </div>
 
-          <p className="text-center text-xs text-muted-foreground mt-6">
-            Managed by the College Placement Cell
-          </p>
+          <p className="mt-6 flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground"><ShieldCheck className="h-3.5 w-3.5" />Student access may require placement-cell verification.</p>
 
         </CardContent>
 

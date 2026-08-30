@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API_BASE_URL } from "../config";
+import { GraduationCap } from "lucide-react";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -23,9 +24,10 @@ const LoginPage = () => {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/auth/login`,
+        `${API_BASE_URL}/api/v1/auth/login`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -46,25 +48,29 @@ const LoginPage = () => {
 
       const data = await response.json();
 
+      const role = data.user?.role?.toUpperCase();
+      if (!["STUDENT", "ADMIN"].includes(role)) {
+        throw new Error("Your account does not have a recognised portal role.");
+      }
+
       sessionStorage.setItem(
-        "token",
-        data.token
+        "accessToken",
+        data.accessToken
       );
 
-      const role = data.role?.toUpperCase();
       sessionStorage.setItem("role", role || "");
 
-      if (data.username) {
+      if (data.user?.username) {
         sessionStorage.setItem(
           "username",
-          data.username
+          data.user.username
         );
       }
 
-      if (data.email) {
+      if (data.user?.email) {
         sessionStorage.setItem(
           "email",
-          data.email
+          data.user.email
         );
       }
 
@@ -72,8 +78,6 @@ const LoginPage = () => {
         navigate("/student/dashboard");
       } else if (role === "ADMIN") {
         navigate("/admin/dashboard");
-      } else {
-        throw new Error("Your account does not have a recognised portal role.");
       }
     } catch (err) {
       setError(
@@ -92,13 +96,7 @@ const LoginPage = () => {
 
         <CardHeader className="space-y-2 text-center">
 
-          <div className="flex justify-center">
-            <img
-              src="/college-logo.png"
-              alt="College Logo"
-              className="h-16 w-16 object-contain"
-            />
-          </div>
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 dark:bg-indigo-950"><GraduationCap className="h-7 w-7" aria-hidden="true" /></div>
 
           <CardTitle className="text-2xl font-bold tracking-tight">
             Welcome back
@@ -118,13 +116,16 @@ const LoginPage = () => {
           >
 
             <div className="space-y-2">
-              <Label>
+              <Label htmlFor="login-identifier">
                 Username / Email
               </Label>
 
               <Input
+                id="login-identifier"
                 type="text"
                 placeholder="Enter username or email"
+                autoComplete="username"
+                required
                 value={username}
                 onChange={(e) =>
                   setUsername(
@@ -135,13 +136,16 @@ const LoginPage = () => {
             </div>
 
             <div className="space-y-2">
-              <Label>
+              <Label htmlFor="login-password">
                 Password
               </Label>
 
               <Input
+                id="login-password"
                 type="password"
                 placeholder="Enter password"
+                autoComplete="current-password"
+                required
                 value={password}
                 onChange={(e) =>
                   setPassword(
@@ -152,7 +156,7 @@ const LoginPage = () => {
             </div>
 
             {error && (
-              <p className="text-sm text-destructive">
+              <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-destructive dark:border-rose-950 dark:bg-rose-950/30">
                 {error}
               </p>
             )}
@@ -173,14 +177,14 @@ const LoginPage = () => {
                 to="/forgot-password"
                 className="text-muted-foreground hover:text-foreground"
               >
-                Forgot Password?
+                Forgot password?
               </Link>
 
               <Link
                 to="/signup"
                 className="text-muted-foreground hover:text-foreground"
               >
-                Create Account
+                Create account
               </Link>
 
             </div>
@@ -188,7 +192,7 @@ const LoginPage = () => {
           </form>
 
           <p className="text-center text-xs text-muted-foreground mt-6">
-            Managed by the College Placement Cell
+            Students sign in with college-issued or approved credentials.
           </p>
 
         </CardContent>

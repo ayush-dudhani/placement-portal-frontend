@@ -1,32 +1,37 @@
-import { Bell, LogOut, User, GraduationCap, Moon, Sun } from "lucide-react";
-
-import { Link, useLocation, useNavigate } from "react-router-dom";
-
-import { Button } from "@/components/ui/button";
-
+import { BriefcaseBusiness, Building2, FileText, LayoutDashboard, LogOut, Moon, Sun, UserRound } from "lucide-react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import BrandMark from "@/components/BrandMark";
+import NotificationMenu from "@/components/NotificationMenu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
+import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/ui/theme-provider";
 import { API_BASE_URL } from "@/config";
+
+const links = [
+  ["/student/dashboard", "Home", LayoutDashboard],
+  ["/student/drives", "Drives", BriefcaseBusiness],
+  ["/student/companies", "Companies", Building2],
+  ["/student/applications", "Applications", FileText],
+  ["/student/profile", "Profile", UserRound],
+];
+
+const linkClass = ({ isActive }) => `flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition ${isActive ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`;
 
 export default function StudentNavbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme, setTheme } = useTheme();
-
-  const username =
-    sessionStorage.getItem("username") || sessionStorage.getItem("email");
+  const { resolvedTheme, setTheme } = useTheme();
+  const username = sessionStorage.getItem("username") || sessionStorage.getItem("email") || "Student";
+  const navClass = (to) => ({ isActive }) => linkClass({ isActive: isActive || (to === "/student/companies" && location.pathname === "/student/company") });
 
   const handleLogout = async () => {
     try {
-      const token = sessionStorage.getItem("token");
-
-      await fetch(`${API_BASE_URL}/auth/logout`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = sessionStorage.getItem("accessToken");
+      if (API_BASE_URL && token) {
+        await fetch(`${API_BASE_URL}/api/v1/auth/logout`, { method: "POST", credentials: "include", headers: { Authorization: `Bearer ${token}` } });
+      }
+    } catch {
+      // A failed server logout should not trap the user in the local session.
     } finally {
       sessionStorage.clear();
       navigate("/login");
@@ -34,69 +39,27 @@ export default function StudentNavbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-background/90 backdrop-blur dark:border-slate-800">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-6">
-        {/* Left */}
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-3">
-            {/* <img
-              src="/college-logo.png"
-              alt="College Logo"
-              className="h-10 w-10"
-            /> */}
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/25"><GraduationCap className="h-5 w-5" /></div>
-
-            <div>
-              <h2 className="font-bold tracking-tight">Placement Portal</h2>
-
-              <p className="text-xs text-muted-foreground">PCCOE</p>
-            </div>
+    <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-background/95 backdrop-blur dark:border-slate-800">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
+        <BrandMark to="/student/dashboard" compact />
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Student workspace">
+          {links.map(([to, label, Icon]) => <NavLink key={to} to={to} className={navClass(to)}><Icon className="h-4 w-4" />{label}</NavLink>)}
+        </nav>
+        <div className="flex items-center gap-1 sm:gap-2">
+          <NotificationMenu role="student" />
+          <Button type="button" variant="ghost" size="icon" className="rounded-full" aria-label="Toggle colour theme" onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
+            {resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+          <div className="hidden items-center gap-2 rounded-full border py-1 pl-1 pr-3 sm:flex">
+            <Avatar className="h-8 w-8"><AvatarFallback className="bg-indigo-100 text-xs font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">{username.charAt(0).toUpperCase()}</AvatarFallback></Avatar>
+            <span className="max-w-28 truncate text-sm font-medium">{username.split("@")[0]}</span>
           </div>
-
-          <nav className="hidden items-center gap-1 md:flex">
-            {[["/student/dashboard", "Dashboard"], ["/student/drives", "Drives"], ["/student/companies", "Companies"], ["/student/applications", "Applications"], ["/student/profile", "Profile"]].map(([to, label]) => (
-              <Link key={to} to={to} className={`rounded-lg px-3 py-2 text-sm font-medium transition ${(location.pathname === to || (to === "/student/companies" && location.pathname === "/student/company")) ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>{label}</Link>
-            ))}
-          </nav>
-        </div>
-
-        {/* Right */}
-        <div className="flex items-center gap-4">
-          <Button size="icon" variant="ghost" className="rounded-full">
-            <Bell className="h-5 w-5" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            {theme === "dark" ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </Button>
-          <div className="flex items-center gap-2">
-            <Avatar>
-              {/* <AvatarImage src={profileImageUrl} /> */}
-              <AvatarFallback>
-                {username ? (
-                  username.charAt(0).toUpperCase()
-                ) : (
-                  <User className="h-4 w-4" />
-                )}
-              </AvatarFallback>
-            </Avatar>
-
-            <span className="hidden max-w-28 truncate text-sm font-medium md:block">{username}</span>
-          </div>
-
-          <Button variant="outline" size="sm" onClick={handleLogout}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </Button>
+          <Button type="button" variant="ghost" size="icon" className="rounded-full" onClick={handleLogout} aria-label="Sign out"><LogOut className="h-4 w-4" /></Button>
         </div>
       </div>
+      <nav className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 pb-2 lg:hidden sm:px-6" aria-label="Student workspace">
+        {links.map(([to, label, Icon]) => <NavLink key={to} to={to} className={navClass(to)}><Icon className="h-4 w-4" />{label}</NavLink>)}
+      </nav>
     </header>
   );
 }
